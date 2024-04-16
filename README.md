@@ -1,4 +1,4 @@
-A small script I use to help me with time tracking at work. I have my daily activities in a file like this:
+A small script I use to help with time tracking. I have my daily activities in a file like this:
 
 ```markdown
 # 16.04.2024
