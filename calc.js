@@ -35,20 +35,20 @@ function writeActivityDurationToFile(path) {
 
     const diff = timeDifferenceInMinutes(time, nextTime);
 
-    console.log(
-      hasDiff ? "true" : "false",
-      " ",
-      time,
-      " ",
-      nextTime,
-      " ",
-      diff
-    );
+    // console.log(
+    //   hasDiff ? "true" : "false",
+    //   " ",
+    //   time,
+    //   " ",
+    //   nextTime,
+    //   " ",
+    //   diff
+    // );
 
     return diff;
   });
 
-  console.log(suffixPerLine);
+  // console.log(suffixPerLine);
 
   const output = lines.map((line, index) => {
     const suffix = suffixPerLine[index];
@@ -58,7 +58,7 @@ function writeActivityDurationToFile(path) {
     return `${line} (${suffix})`;
   });
 
-  console.log(output);
+  // console.log(output);
 
   try {
     fs.writeFileSync(path, output.join("\n"));
