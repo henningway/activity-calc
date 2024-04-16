@@ -10,7 +10,7 @@ A small script I use to help with time tracking. I have my daily activities in a
 1700 done
 ```
 
-The script (`npm run calc`) writes the number of minutes an activity takes to the end of the line:
+The script (`npm run calc`) writes the number of minutes each activity takes to the end of the line:
 
 ```markdown
 # 16.04.2024
