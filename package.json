@@ -1,0 +1,10 @@
+{
+  "name": "activity-calc",
+  "version": "0.0.1",
+  "description": "Small node script to calculate duration of daily activities.",
+  "scripts": {
+    "calc": "node calc.js"
+  },
+  "author": "Henning Schindler",
+  "license": "MIT"
+}
