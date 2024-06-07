@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "description": "Small node script to calculate duration of daily activities.",
   "scripts": {
-    "calc": "node calc.js"
+    "calc": "node calc.js",
+    "test": "vitest"
   },
   "author": "Henning Schindler",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "1.6.0"
+  }
 }

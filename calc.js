@@ -18,7 +18,7 @@ function writeActivityDurationToFile(path) {
 
 /**
  * Updates each activity entry of the input file with a duration.
- * 
+ *
  * @param {string[]} lines
  * @return {string[]}
  */
@@ -125,3 +125,7 @@ function readFile(path) {
 const isNumber = (v) => !isNaN(Number(v));
 
 writeActivityDurationToFile("./activity.md");
+
+module.exports = {
+  augmentWithDurations,
+};
