@@ -7,13 +7,23 @@ const fs = require("node:fs");
  */
 function writeActivityDurationToFile(path) {
   const lines = readFile(path).toString().split("\n");
-  const output = addDurationSuffixes(lines, durationPerLine(lines));
+  const output = augmentWithDurations(lines);
 
   try {
     fs.writeFileSync(path, output.join("\n"));
   } catch (err) {
     console.error(err);
   }
+}
+
+/**
+ * Updates each activity entry of the input file with a duration.
+ * 
+ * @param {string[]} lines
+ * @return {string[]}
+ */
+function augmentWithDurations(lines) {
+  return addDurationSuffixes(lines, durationPerLine(lines));
 }
 
 /**
