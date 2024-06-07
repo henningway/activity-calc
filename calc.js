@@ -17,6 +17,25 @@ function writeActivityDurationToFile(path) {
   }
 }
 
+function addSuffixToFilePath(path, suffix) {
+  const parts = path.split(".");
+  const extension = parts.pop();
+  const fileName = parts.join(".");
+  return `${fileName}${suffix}.${extension}`;
+}
+
+function writeReportToFile(path) {
+  const lines = readFile(path).toString().split("\n");
+
+  const output = prepareReportForOutput(createReport(lines));
+
+  try {
+    fs.writeFileSync(addSuffixToFilePath(path, "_report"), output);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 /**
  * Updates each activity entry of the input file with a duration.
  *
@@ -187,6 +206,23 @@ function createReport(lines) {
 }
 
 /**
+ * Takes the output of createReport() and parses it into a string that can be written to a file.
+ *
+ * @return string
+ */
+function prepareReportForOutput(report) {
+  const _map = (fn, x) => R.values(R.mapObjIndexed(fn, x));
+
+  return R.join(
+    "\n\n",
+    _map((daily, date) => {
+      const lines = _map((duration, label) => `${label}: ${duration}`, daily);
+      return `# ${date}\n\n${R.join("\n", lines)}`;
+    }, report)
+  );
+}
+
+/**
  * Maps a function to all entries in all groups.
  */
 function mapGroup(fn, groups) {
@@ -216,7 +252,7 @@ function readFile(path) {
  */
 const isNumber = (v) => !isNaN(Number(v));
 
-writeActivityDurationToFile("./activity.md");
+writeReportToFile("./activity.md");
 
 module.exports = {
   augmentWithDurations,
@@ -227,4 +263,5 @@ module.exports = {
   groupByDate,
   groupByDateAndAnalyze,
   mapGroup,
+  prepareReportForOutput,
 };

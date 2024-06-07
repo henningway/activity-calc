@@ -5,6 +5,7 @@ import {
   durationPerLine,
   groupByDate,
   groupByDateAndAnalyze,
+  prepareReportForOutput,
 } from "./calc";
 
 const input = [
@@ -169,7 +170,7 @@ it("can group and analyze (provide meta information to each line) the input", ()
   });
 });
 
-it("can provide a report", () => {
+it("can provide a daily report with aggregated durations", () => {
   expect(createReport(input)).toStrictEqual({
     "27.05.2024": {
       Daily: 15,
@@ -186,4 +187,22 @@ it("can provide a report", () => {
       "Responsive Ereignis-Kacheln": 370,
     },
   });
+});
+
+it("can provide the daily report as string prepared for output", () => {
+  expect(prepareReportForOutput(createReport(input))).toEqual(`# 28.05.2024
+
+Ankommen: 10
+Daily: 10
+Responsive Ereignis-Kacheln: 370
+Mittag: 40
+
+# 27.05.2024
+
+Gitlab/Mails: 10
+Daily: 15
+Labern: 15
+Dev-Meeting: 105
+Mittag: 35
+Responsive Ereignis-Kacheln: 190`);
 });
