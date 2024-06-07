@@ -1,14 +1,11 @@
-import { it, expect } from "vitest";
+import { expect, it } from "vitest";
 import {
-  analyzeInput,
   augmentWithDurations,
+  createReport,
   durationPerLine,
-  extractLabel,
-  extractTimestamp,
   groupByDate,
-  mapGroup,
+  groupByDateAndAnalyze,
 } from "./calc";
-import { map, zip } from "ramda";
 
 const input = [
   "# 28.05.2024",
@@ -103,7 +100,7 @@ it("can group by date", () => {
 });
 
 it("can group and analyze (provide meta information to each line) the input", () => {
-  expect(analyzeInput(input)).toStrictEqual({
+  expect(groupByDateAndAnalyze(input)).toStrictEqual({
     "27.05.2024": [
       { text: "", label: undefined, duration: undefined, timestamp: undefined },
       {
@@ -142,7 +139,12 @@ it("can group and analyze (provide meta information to each line) the input", ()
         duration: 10,
         timestamp: "0950",
       },
-      { text: "1000 Daily (10)", label: "Daily", duration: 10, timestamp: "1000" },
+      {
+        text: "1000 Daily (10)",
+        label: "Daily",
+        duration: 10,
+        timestamp: "1000",
+      },
       {
         text: "1010 Responsive Ereignis-Kacheln",
         label: "Responsive Ereignis-Kacheln",
@@ -164,5 +166,24 @@ it("can group and analyze (provide meta information to each line) the input", ()
       },
       { text: "", label: undefined, duration: undefined, timestamp: undefined },
     ],
+  });
+});
+
+it("can provide a report", () => {
+  expect(createReport(input)).toStrictEqual({
+    "27.05.2024": {
+      Daily: 15,
+      "Dev-Meeting": 105,
+      "Gitlab/Mails": 10,
+      Labern: 15,
+      Mittag: 35,
+      "Responsive Ereignis-Kacheln": 190,
+    },
+    "28.05.2024": {
+      Ankommen: 10,
+      Daily: 10,
+      Mittag: 40,
+      "Responsive Ereignis-Kacheln": 370,
+    },
   });
 });

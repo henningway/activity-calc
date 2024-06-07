@@ -168,7 +168,26 @@ function groupByDateAndAnalyze(lines) {
 }
 
 /**
- * Maps a function to all lines in all groups.
+ * Aggregates entries with a common label by adding their durations and disregarding other information.
+ */
+function aggregate(entries) {
+  return R.pipe(
+    R.filter((entry) => entry.duration !== undefined),
+    R.groupBy(R.prop("label")),
+    R.map(R.map(R.prop("duration"))),
+    R.map(R.sum)
+  )(entries);
+}
+
+/**
+ * Creates a daily report with aggregated durations per label given the input lines.
+ */
+function createReport(lines) {
+  return R.map(aggregate, groupByDateAndAnalyze(lines));
+}
+
+/**
+ * Maps a function to all entries in all groups.
  */
 function mapGroup(fn, groups) {
   return R.map(R.map(fn), groups);
@@ -200,11 +219,12 @@ const isNumber = (v) => !isNaN(Number(v));
 writeActivityDurationToFile("./activity.md");
 
 module.exports = {
-  analyzeInput: groupByDateAndAnalyze,
   augmentWithDurations,
+  createReport,
   durationPerLine,
   extractLabel,
   extractTimestamp,
   groupByDate,
+  groupByDateAndAnalyze,
   mapGroup,
 };
