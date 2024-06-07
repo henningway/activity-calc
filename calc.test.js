@@ -1,23 +1,23 @@
 import { it, expect } from "vitest";
-import { augmentWithDurations } from "./calc";
+import { augmentWithDurations, durationPerLine } from "./calc";
+
+const input = [
+  "# 05.06.2024",
+  "",
+  "1000 Daily",
+  "1010 Gitlab/Mails",
+  "1035 Responsive Ereignis-Kacheln",
+  "1100 Meeting Strategie E2E-Tests",
+  "1205 Mittag",
+  "1255 FASÖ Review",
+  "1300 Gitlab/Mails",
+  "1310 Responsive Ereignis-Kacheln",
+  "1540 FASÖ Review",
+  "1545 Gitlab/Mails",
+  "1630 Ende",
+];
 
 it("can add durations to activities", () => {
-  const input = [
-    "# 05.06.2024",
-    "",
-    "1000 Daily",
-    "1010 Gitlab/Mails",
-    "1035 Responsive Ereignis-Kacheln",
-    "1100 Meeting Strategie E2E-Tests",
-    "1205 Mittag",
-    "1255 FASÖ Review",
-    "1300 Gitlab/Mails",
-    "1310 Responsive Ereignis-Kacheln",
-    "1540 FASÖ Review",
-    "1545 Gitlab/Mails",
-    "1630 Ende",
-  ];
-
   expect(augmentWithDurations(input)).toStrictEqual([
     "# 05.06.2024",
     "",
@@ -32,5 +32,23 @@ it("can add durations to activities", () => {
     "1540 FASÖ Review (5)",
     "1545 Gitlab/Mails (45)",
     "1630 Ende",
+  ]);
+});
+
+it("can provide duration per line", () => {
+  expect(durationPerLine(input)).toStrictEqual([
+    undefined,
+    undefined,
+    10,
+    25,
+    25,
+    65,
+    50,
+    5,
+    10,
+    150,
+    5,
+    45,
+    undefined,
   ]);
 });

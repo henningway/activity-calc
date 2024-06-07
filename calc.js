@@ -128,4 +128,5 @@ writeActivityDurationToFile("./activity.md");
 
 module.exports = {
   augmentWithDurations,
+  durationPerLine
 };
