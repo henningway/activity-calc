@@ -173,18 +173,14 @@ it("can group and analyze (provide meta information to each line) the input", ()
 it("can provide a daily report with aggregated durations", () => {
   expect(createReport(input)).toStrictEqual({
     "27.05.2024": {
-      Daily: 15,
       "Dev-Meeting": 105,
       "Gitlab/Mails": 10,
-      Labern: 15,
-      Mittag: 35,
       "Responsive Ereignis-Kacheln": 190,
+      SUMME: 305,
     },
     "28.05.2024": {
-      Ankommen: 10,
-      Daily: 10,
-      Mittag: 40,
       "Responsive Ereignis-Kacheln": 370,
+      SUMME: 370,
     },
   });
 });
@@ -192,17 +188,13 @@ it("can provide a daily report with aggregated durations", () => {
 it("can provide the daily report as string prepared for output", () => {
   expect(prepareReportForOutput(createReport(input))).toEqual(`# 28.05.2024
 
-Ankommen: 10
-Daily: 10
-Responsive Ereignis-Kacheln: 370
-Mittag: 40
+Responsive Ereignis-Kacheln: 6.17
+SUMME: 6.17
 
 # 27.05.2024
 
-Gitlab/Mails: 10
-Daily: 15
-Labern: 15
-Dev-Meeting: 105
-Mittag: 35
-Responsive Ereignis-Kacheln: 190`);
+Gitlab/Mails: 0.17
+Dev-Meeting: 1.75
+Responsive Ereignis-Kacheln: 3.17
+SUMME: 5.08`);
 });

@@ -1,6 +1,8 @@
 const fs = require("node:fs");
 const R = require("ramda");
 
+const LABEL_BLACKLIST = ["Ankommen", "Daily", "Labern", "Mittag", "Schnacken"];
+
 /**
  * Augments the activity entries in the file at given path with durations.
  *
@@ -17,6 +19,9 @@ function writeActivityDurationToFile(path) {
   }
 }
 
+/**
+ * Adds a suffix to the filename in given path.
+ */
 function addSuffixToFilePath(path, suffix) {
   const parts = path.split(".");
   const extension = parts.pop();
@@ -27,7 +32,9 @@ function addSuffixToFilePath(path, suffix) {
 function writeReportToFile(path) {
   const lines = readFile(path).toString().split("\n");
 
-  const output = prepareReportForOutput(createReport(lines));
+  const report = createReport(lines);
+
+  const output = prepareReportForOutput(report);
 
   try {
     fs.writeFileSync(addSuffixToFilePath(path, "_report"), output);
@@ -191,7 +198,11 @@ function groupByDateAndAnalyze(lines) {
  */
 function aggregate(entries) {
   return R.pipe(
-    R.filter((entry) => entry.duration !== undefined),
+    R.filter(
+      (entry) =>
+        entry.duration !== undefined &&
+        !R.includes(entry.label, LABEL_BLACKLIST)
+    ),
     R.groupBy(R.prop("label")),
     R.map(R.map(R.prop("duration"))),
     R.map(R.sum)
@@ -202,7 +213,10 @@ function aggregate(entries) {
  * Creates a daily report with aggregated durations per label given the input lines.
  */
 function createReport(lines) {
-  return R.map(aggregate, groupByDateAndAnalyze(lines));
+  return R.mapObjIndexed(
+    (daily) => ({ ...daily, SUMME: R.pipe(R.values, R.sum)(daily) }),
+    R.map(aggregate, groupByDateAndAnalyze(lines))
+  );
 }
 
 /**
@@ -216,7 +230,11 @@ function prepareReportForOutput(report) {
   return R.join(
     "\n\n",
     _map((daily, date) => {
-      const lines = _map((duration, label) => `${label}: ${duration}`, daily);
+      const lines = _map(
+        (duration, label) =>
+          `${label}: ${Math.round((duration / 60) * 100) / 100}`,
+        daily
+      );
       return `# ${date}\n\n${R.join("\n", lines)}`;
     }, report)
   );
