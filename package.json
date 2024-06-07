@@ -9,6 +9,10 @@
   "author": "Henning Schindler",
   "license": "MIT",
   "devDependencies": {
+    "@vitest/ui": "1.6.0",
     "vitest": "1.6.0"
+  },
+  "dependencies": {
+    "ramda": "0.30.1"
   }
 }
